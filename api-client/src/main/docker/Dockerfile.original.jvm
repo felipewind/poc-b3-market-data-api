@@ -48,9 +48,6 @@ COPY --chown=1001 target/quarkus-app/*.jar /deployments/
 COPY --chown=1001 target/quarkus-app/app/ /deployments/app/
 COPY --chown=1001 target/quarkus-app/quarkus/ /deployments/quarkus/
 
-COPY certificates /tmp/ssl
-RUN keytool -importcert -noprompt -keystore /etc/alternatives/jre/lib/security/cacerts -storepass changeit -file /tmp/ssl/b3-api.crt -alias "b3-api-root"
-
 EXPOSE 8080
 USER 1001
 

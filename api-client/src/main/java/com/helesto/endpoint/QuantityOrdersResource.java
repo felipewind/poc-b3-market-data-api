@@ -53,7 +53,7 @@ public class QuantityOrdersResource {
     @APIResponse(responseCode = "501", description = "Not Implemented")
     @APIResponse(responseCode = "503", description = "Service Unavailable")
     public Response ordersInformation(
-            @Parameter(example = "73d90e13-c4cb-4b5f-acd6-7f3d89ce7d8b", description = "keyId from your https://developers.b3.com.br/ user") @QueryParam("keyId") String keyId,
+            @Parameter(example = "xxxxxx-yyyy-zzzz-xxxx-zzzzzzz", description = "keyId from your https://developers.b3.com.br/ user") @QueryParam("keyId") String keyId,
             @Parameter(example = "2020-01-10") @QueryParam("SessionStartDate") String sessionStartDate,
             @Parameter(example = "2020-01-10") @QueryParam("SessionEndDate") String sessionEndDate,
             @Parameter(example = "PETR4") @QueryParam("Symbol") String symbol) {
@@ -75,7 +75,7 @@ public class QuantityOrdersResource {
         return Response.status(Response.Status.OK).entity(quantityOrdersRsp).build();
     }
 
-    // @Timeout(value = 10, unit = ChronoUnit.SECONDS)
+    @Timeout(value = 10, unit = ChronoUnit.SECONDS)
     public void getB3Endpoint() {
 
         LOG.debug("Before the B3 endpoint");

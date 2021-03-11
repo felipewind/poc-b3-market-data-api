@@ -2,8 +2,9 @@
 
 ## Example of a http GET to consume the B3 API
 
+```
 https://api-marketdata-sandbox.b3.com.br/api/orders/v1.0/QuantityOrders?SessionStartDate=2020-01-10&SessionEndDate=2020-01-10&Symbol=PETR4
-
+```
 
 ## Import the B3 ssl certificate to your Java platform
 

@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  poc-b3-market-data-api:
+    container_name: poc-b3-market-data-api
+    image: felipewind/poc-b3-market-data-api:1.0    
+    build:
+      context: ./api-client/
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    ports:
+      - 8080:8080
+    networks:
+      - poc-b3-market-data-api-net      
+    environment:
+      - B3_ENDPOINT=https://api-marketdata-sandbox.b3.com.br/api/orders
+
+
+networks:
+  poc-b3-market-data-api-net:
+    driver: bridge
