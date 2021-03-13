@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  poc-b3-market-data-api:
+    container_name: poc-b3-market-data-api
+    image: felipewind/poc-b3-market-data-api:1.0    
+    build:
+      context: ./api-client/
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    ports:
+      - 8080:8080
+    networks:
+      - poc-b3-market-data-api-net      
+    environment:
+      - B3_ENDPOINT=http://mock-b3-market-data-api:8090/api/orders
+
+  mock-b3-market-data-api:
+    container_name: mock-b3-market-data-api
+    image: felipewind/mock-b3-market-data-api:1.0    
+    build:
+      context: ./mock-server/
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    ports:
+      - 8090:8090
+    networks:
+      - poc-b3-market-data-api-net   
+
+
+networks:
+  poc-b3-market-data-api-net:
+    driver: bridge
