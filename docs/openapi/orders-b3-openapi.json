@@ -1,0 +1,704 @@
+{
+  "swagger" : "2.0",
+  "host" : "api-marketdata-sandbox.b3.com.br",
+  "basePath" : "/api/orders",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/v1.0/OrdersInformation" : {
+      "get" : {
+        "description" : "Esta API retorna as informações sobre as ofertas de compra e venda. \nAs ofertas são atos pelos quais os participantes autorizados, manifestam a intenção de realizar a compra ou a venda de ativos ou derivativos. \nEstão disponíveis, para consulta, os dados a partir de 02/01/2020, e no Sandbox os dados disponíveis são exclusivamente do mês 01/2020.\n.\n\nThis API returns information about buying and selling orders. \nAs orders are equities for which participants receive, they express their intention to make a buy or sell of assets or derivatives. \nThey are available for data consultation from 01/02/2020, and at Sandbox data available are exclusively from the month 01/2020.",
+        "operationId" : "OrdersInformationReqget",
+        "parameters" : [ {
+          "description" : "Parâmetro para pesquisa que representa a data início do pregão, na qual será baseada a consulta.\nO mesmo obrigatoriamente deve ser informado na chamada da API.\nFormato:YYYY-MM-DD.",
+          "format" : "date",
+          "required" : true,
+          "in" : "query",
+          "name" : "SessionStartDate",
+          "type" : "string"
+        }, {
+          "description" : " Parâmetro para pesquisa  representa a data fim do pregão, na qual será baseada a consulta.  O mesmo obrigatoriamente deve ser informado na chamada da API.\nFormato: YYYY-MM-DD",
+          "required" : true,
+          "in" : "query",
+          "name" : "SessionEndDate",
+          "type" : "string"
+        }, {
+          "description" : "Representa o código do tipo da oferta.  Pode ser usado como \"filtro\" para a pesquisa caso informado na entrada.\nValores disponíveis (domínio) para TypeName  :\nDomínio : \n1 – Market (with Protection)\n2 – Limit\n3 – Stop (with Protection)\n4 – Stop Limit\nK – Market With Leftover As Limit",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "TypeName",
+          "type" : "array"
+        }, {
+          "description" : "\nTambém identificado como TickerSymbol, é um arranjo de caracteres (geralmente letras) representando um título específico listado em uma troca ou de outra forma comercialmente.  Quando uma empresa emite títulos para o mercado público, seleciona um símbolo disponível para si.\nExemplo : B3SA3\nNos parâmetros de chamada é aceita a busca por uma parte do nome, como no caso do exemplo  o Symbol B3SA3 pode ser pesquisado parcialmente desde que seja acrescentado o caractere \" * \". \nExemplo :  B3SA*",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Symbol",
+          "type" : "array"
+        }, {
+          "description" : "Especifica qual é o sentido da negociação, \"Compra\" ou \"Venda\".\n\nPode ser usado como parâmetro para a pesquisa informando-se um ou mais do códigos disponíveis.\n\nBasta não informar nenhum valor para a consulta sem filtros.\n\nValores disponíveis para OrderSide(domínio) :\n\n1 - Buy \n2 - Sale",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "OrderSide",
+          "type" : "array"
+        }, {
+          "description" : "Número para filtro de sequência da oferta por range inicial. Deve-se informar o range inicial da sequência. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialSequentialOrderNumber",
+          "type" : "integer"
+        }, {
+          "description" : "Número para filtro de sequência da oferta por range final. Deve-se informar o range final da sequência. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalSequentialOrderNumber",
+          "type" : "integer"
+        }, {
+          "description" : "Identificador único gerado pela Exchange que pode ser alterado a cada evento que modifique a ordem.\nComo exemplo nos casos de ordens do tipo \"iceberg\", onde só uma parte da quantidade total da oferta fica visível no mercado.\nA cada vez que uma nova parte da ordem, que não estava visível, for incluída esse campo será atualizado com um novo valor geração de oferta de compra.",
+          "format" : "int64",
+          "required" : false,
+          "items" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "SecondaryOrderIdentification",
+          "type" : "array"
+        }, {
+          "description" : "'Enquanto o campo OrderStatus indica a situação atual da oferta o campo Execution type indica um gatilho para a mudança do status através de um \"ExecutionReport\". Sempre que é necessário realizar uma mudança no status o broker(sellside) envia um ExecutionReport informando o ExecutionType com o novo status desejado.\nDomínio:\n0 – New\n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nD – Restated\nF – Trade",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "ExecutionType",
+          "type" : "array"
+        }, {
+          "description" : "Horário inicial de registro da oferta no sistema, utilizada como indicadora de prioridade. Este campo pode ser o parâmetro inicial para pesquisa por range de horário de registro de ferta. Quando esse parâmetro é preenchido, os dados serão retornados com valor igual ou maior que o informado.  Formato: HH:MM:SS.NNNNNN",
+          "format" : "time",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialPriorityTime",
+          "type" : "string"
+        }, {
+          "description" : "Horário final de registro da oferta no sistema, utilizada como indicadora de prioridade .  Este campo pode ser utilizado como    parâmetro final  para pesquisa  por range de horário de registro de oferta. Quando esse parâmetro é preenchido, os dados serão retornados com valor igual ou menor que o informado.  Formato: HH:MM:SS.NNNNNN",
+          "format" : "time",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalPriorityTime",
+          "type" : "string"
+        }, {
+          "description" : "Preço inicial da Oferta. - O separador decimal deve ser ponto (.) e não vírgula. Deve-se informar um valor Positivo. Caso esse parâmetro seja preenchido, os dados serão retornados com  valor igual ou maior que o informado.  Formato: Number(22,8) exemplo: 100.00000000",
+          "format" : "double",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderPrice",
+          "type" : "number"
+        }, {
+          "description" : "'Preço final da Oferta. - O separador decimal deve ser ponto (.) e não vírgula(,). - Deve-se informar um valor Positivo. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado. \nFormato: Number(22,8) exemplo: 150.00000000'",
+          "format" : "double",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderPrice",
+          "type" : "number"
+        }, {
+          "description" : "Range inicial da quantidade total da oferta. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderTotalQuantity",
+          "type" : "integer"
+        }, {
+          "description" : "Range final da quantidade total da oferta. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderTotalQuantity",
+          "type" : "integer"
+        }, {
+          "description" : "Range inicial da quantidade negociada da oferta. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderNegotiateQuantity",
+          "type" : "integer"
+        }, {
+          "description" : "Range final da quantidade negociada da oferta. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado.",
+          "format" : "int64",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderNegotiateQuantity",
+          "type" : "integer"
+        }, {
+          "description" : "'Data inicial da oferta String no formato Date. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado. \nFormato: YYYY-MM-DD'",
+          "format" : "date",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderDate",
+          "type" : "string"
+        }, {
+          "description" : "'Data final da oferta String no formato Date. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado. \nFormato: YYYY-MM-DD'",
+          "format" : "date",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderDate",
+          "type" : "string"
+        }, {
+          "description" : "Data e hora inicial de entrada da Oferta String no formato date-time.\nCaso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado.             \nFormato: YYYY-MM-DD HH:MM:SS",
+          "format" : "datetime",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderEntryDateTime",
+          "type" : "string"
+        }, {
+          "description" : "Data e hora final de entrada da Oferta String no formato date-time. Caso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado.             \nFormato:  YYYY-MM-DD HH:MM:SS",
+          "format" : "datetime",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderEntryDateTime",
+          "type" : "string"
+        }, {
+          "description" : "Indicador de estado da ordem.\nDomínio:\n0 – New\n1 – Partially Filled\n2 – Filled\n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nZ – Previous Final State",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "OrderStatus",
+          "type" : "array"
+        }, {
+          "description" : "Código que identifica a condição da oferta.\nDomínio :\n0 - Neutral Order\n1 - Aggressor Order\n2 - Agressed Order",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "AggressorIndicator",
+          "type" : "array"
+        }, {
+          "description" : "Código que identifica a corretora",
+          "required" : false,
+          "items" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "PartyIdentificationCode",
+          "type" : "array"
+        }, {
+          "description" : "Campos que devem retornar no JSON.",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "ReturnFields",
+          "type" : "array"
+        }, {
+          "description" : "Identificador do último registro capturado,  informar em caso de interrupção de conexão ou falha na captura dos dados",
+          "required" : false,
+          "in" : "query",
+          "name" : "Page",
+          "type" : "string"
+        }, {
+          "description" : "Quantidade de registros contidos em cada página",
+          "format" : "int32",
+          "required" : false,
+          "in" : "query",
+          "name" : "ItemsPerPage",
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/OrdersInformationRspget"
+            }
+          },
+          "201" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "422" : {
+            "description" : "Unprocessable Entity"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          },
+          "501" : {
+            "description" : "Not Implemented"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "The specified resource was not found"
+          },
+          "503" : {
+            "description" : "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/v1.0/InstrumentStatusChange" : {
+      "get" : {
+        "description" : "Esta API retorna os dados referente a mudança de estado das ações negociadas na B3.  Estão disponíveis, para consulta, os dados a partir de 02/01/2020, e no Sandbox os dados disponíveis são exclusivamente do mês 01/2020.\n.\nThis API returns the data referente the change in the status of the equities traded  in the B3. The data is available for consultation from 01/02/2020, and in the Sandbox the data available are exclusively from the month 01/2020.",
+        "operationId" : "InstrumentStatusChange",
+        "parameters" : [ {
+          "description" : "Data do pregão quando houve o evento da mudança  de estado do instrumento. A busca retornará somente dados da data informada.\nFormato: YYYY-MM-DD",
+          "format" : "date",
+          "required" : true,
+          "in" : "query",
+          "name" : "SessionDate",
+          "type" : "string"
+        }, {
+          "description" : "Horário do evento quando houve a mudança de estado do instrumento\nFormato: HH:MM:SS.MMM",
+          "format" : "time",
+          "required" : true,
+          "in" : "query",
+          "name" : "InitialEventTime",
+          "type" : "string"
+        }, {
+          "description" : "Horário do evento quando houve a mudança de estado  do instrumento\nFormato: HH:MM:SS.MMM",
+          "format" : "time",
+          "required" : true,
+          "in" : "query",
+          "name" : "FinalEventTime",
+          "type" : "string"
+        }, {
+          "description" : "Também identificado como TickerSymbol, é um arranjo de caracteres (geralmente letras) representando um título específico listado em uma troca ou de outra forma comercialmente. \nQuando uma empresa emite títulos para o mercado público, seleciona um símbolo disponível para si.\nNão aceita pesquisa por aproximação.\nNão é possível informar mais um Symbol para consulta.\nExemplo :  B3SA3",
+          "required" : true,
+          "in" : "query",
+          "name" : "Symbol",
+          "type" : "string"
+        }, {
+          "description" : "Identificador do último registro capturado,  informar em caso de interrupção de conexão ou falha na captura dos dados",
+          "required" : false,
+          "in" : "query",
+          "name" : "Page",
+          "type" : "string"
+        }, {
+          "description" : "Quantidade de registros contidos em cada página",
+          "format" : "int32",
+          "required" : false,
+          "in" : "query",
+          "name" : "ItemsPerPage",
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/InstrumentStatusRspget"
+            }
+          },
+          "201" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "422" : {
+            "description" : "Unprocessable Entity"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          },
+          "501" : {
+            "description" : "Not Implemented"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "The specified resource was not found"
+          },
+          "503" : {
+            "description" : "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/v1.0/QuantityOrders" : {
+      "get" : {
+        "description" : "Esta API retorna o consolidado das ofertas de compra e/ou venda de um determinado intervalo de datas. \nEstão disponíveis, para consulta, os dados a partir de 02/01/2020, e no Sandbox os dados disponíveis são exclusivamente do mês 01/2020. \n.\nThis API returns the consolidated of orders to buy and / or sell for a given date range.\nThe data are available for consultation as of 01/02/2020, and at Sandbox data available are exclusively from the month 01/2020.",
+        "operationId" : "QuantityOrdersReqget",
+        "parameters" : [ {
+          "description" : "Parâmetro para pesquisa que  representa a data início do pregão, na qual será baseada a consulta. O mesmo obrigatoriamente deve ser informado na chamada da API.          \nFormato:YYYY-MM-DD",
+          "required" : true,
+          "in" : "query",
+          "name" : "SessionStartDate",
+          "type" : "string"
+        }, {
+          "description" : "Parâmetro para pesquisa  representa a data fim do pregão, na qual será baseada a consulta.  O mesmo obrigatoriamente deve ser informado na chamada da API.",
+          "required" : true,
+          "in" : "query",
+          "name" : "SessionEndDate",
+          "type" : "string"
+        }, {
+          "description" : "Também identificado como TickerSymbol, é um arranjo de caracteres (geralmente letras) representando um título específico listado em uma troca ou de outra forma comercialmente. \nQuando uma empresa emite títulos para o mercado público, seleciona um símbolo disponível para si.\nExemplo : B3SA3\nNos parâmetros de chamada é aceita a busca por uma parte do nome, como no caso do exemplo  o Symbol B3SA3 pode ser pesquisado parcialmente desde que seja acrescentado o caractere \" * \". \nExemplo :  B3SA*",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Symbol",
+          "type" : "array"
+        }, {
+          "description" : "Especifica qual é o sentido da negociação.  \"Compra\" ou \"Venda\".\nPode ser usado como parâmetro para a pesquisa informando-se um ou mais do códigos disponíveis.\nBasta não informar nenhum valor para a consulta sem filtros.\nValores disponíveis para OrderSide(domínio) :\nValor  – Descrição\n1       -  Buy\n2      -  Sale",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "OrderSide",
+          "type" : "array"
+        }, {
+          "description" : "Enquanto o campo OrderStatus indica a situação atual da oferta o campo Execution type indica um gatilho para a mudança do status através de um \"ExecutionReport\".\nSempre que é necessário realizar uma mudança no status o broker(sellside) envia um ExecutionReport informando o ExecutionType com o novo status desejado.\nDomínio:\n\n0 – New\n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nD – Restated\nF – Trade ",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "ExecutionType",
+          "type" : "array"
+        }, {
+          "description" : "Data inicial da oferta String no formato date.\nCaso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou maior que o informado.\nFormato: YYYY-MM-DD",
+          "format" : "date",
+          "required" : false,
+          "in" : "query",
+          "name" : "InitialOrderDate",
+          "type" : "string"
+        }, {
+          "description" : "Data final da oferta String no formato date.\nCaso esse parâmetro seja preenchido, os dados serão retornados com valor igual ou menor que o informado.            \nFormato: YYYY-MM-DD",
+          "format" : "date",
+          "required" : false,
+          "in" : "query",
+          "name" : "FinalOrderDate",
+          "type" : "string"
+        }, {
+          "description" : "Indicador de estado da ordem.\n\nDeve-se usar apenas 01 caractere por item da lista conforme valores disponíveis.\n\nDomínio:\n0 – New\n1 – Partially Filled\n2 – Filled\n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nZ – Previous Final State",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "OrderStatus",
+          "type" : "array"
+        }, {
+          "description" : "Código que identifica a condição da oferta.\nDomínio :\n0 - Neutral Order\n1 - Aggressor Order\n2 - Agressed Order",
+          "required" : false,
+          "items" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "AggressorIndicator",
+          "type" : "array"
+        }, {
+          "description" : "Código que identifica a corretora",
+          "required" : false,
+          "items" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "PartyIdentificationCode",
+          "type" : "array"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/QuantityOrdersRspget"
+            }
+          },
+          "201" : {
+            "description" : "No Content"
+          },
+          "400" : {
+            "description" : "Bad Request"
+          },
+          "422" : {
+            "description" : "Unprocessable Entity"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          },
+          "501" : {
+            "description" : "Not Implemented"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "The specified resource was not found"
+          },
+          "503" : {
+            "description" : "Service Unavailable"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Domínio Type Name" : {
+      "description" : " 1 – Market (with Protection)\n2 – Limit\n3 – Stop (with Protection)\n4 – Stop Limit\nK – Market With Leftover As Limit",
+      "type" : "string"
+    },
+    "Domínio Order Fields" : {
+      "description" : "-- SessionDate\n-- TypeName\n-- Symbol\n-- OrderSide\n-- SequentialOrderNumber\n-- SecondaryOrderIdentification\n-- ExecutionType\n-- PriorityTime\n-- OrderPrice\n-- OrderTotalQuantity\n-- OrderNegotiateQuantity\n-- OrderDate\n-- OrderEntryDateTime\n-- OrderStatus\n-- AggressorIndicator\n-- PartyIdentificationCode",
+      "type" : "string"
+    },
+    "Domínio Aggressor" : {
+      "description" : "0 - Neutral Order\n1 - Aggressor Order\n2 - Agressed Order",
+      "type" : "integer"
+    },
+    "QuantityOrdersRspget" : {
+      "description" : "",
+      "properties" : {
+        "Value" : {
+          "description" : "",
+          "example" : "1000",
+          "type" : "integer"
+        }
+      },
+      "type" : "object"
+    },
+    "Error" : {
+      "required" : [ "code", "message" ],
+      "properties" : {
+        "code" : {
+          "type" : "string"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      },
+      "type" : "object"
+    },
+    "Domínio Order Side" : {
+      "description" : "1 - Buy \n2 - Sale",
+      "type" : "integer"
+    },
+    "InstrumentStatusRspget" : {
+      "description" : "Nesta área podemos ver as informações que resultam da consulta feita pela API InstrumentStatusChange",
+      "properties" : {
+        "Data" : {
+          "$ref" : "#/definitions/DataInstrStatusChange"
+        },
+        "Included" : {
+          "$ref" : "#/definitions/Pagination"
+        }
+      },
+      "type" : "object"
+    },
+    "Pagination" : {
+      "description" : " ",
+      "properties" : {
+        "LastPageIndicator" : {
+          "description" : " ",
+          "example" : "False",
+          "type" : "boolean"
+        },
+        "NextPageURL" : {
+          "description" : " ",
+          "example" : "https://dva.b3.com.br //api/v1.0/ Page=XNDSNS",
+          "type" : "string"
+        }
+      },
+      "type" : "object"
+    },
+    "DataInstrStatusChange" : {
+      "description" : "Área de dados da mudança de estado",
+      "items" : {
+        "properties" : {
+          "SessionDate" : {
+            "description" : " ",
+            "example" : "2020-01-06",
+            "type" : "string"
+          },
+          "EventTime" : {
+            "description" : " ",
+            "example" : "14:30:45.350",
+            "type" : "string"
+          },
+          "Symbol" : {
+            "description" : " ",
+            "example" : "PETR4",
+            "type" : "string"
+          },
+          "SecurityTradingStatus" : {
+            "description" : " ",
+            "example" : 17,
+            "type" : "integer"
+          },
+          "TheoricPrice" : {
+            "description" : " ",
+            "example" : "500.00",
+            "type" : "number"
+          },
+          "TheoricQuantity" : {
+            "description" : " ",
+            "example" : "100",
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "type" : "array"
+    },
+    "Domínio Order Status" : {
+      "description" : "0 – New\n1 – Partially Filled\n2 – Filled\n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nZ – Previous Final State",
+      "type" : "string"
+    },
+    "DataOrders" : {
+      "description" : "",
+      "items" : {
+        "properties" : {
+          "SessionDate" : {
+            "description" : "",
+            "example" : "2020-01-06",
+            "type" : "string"
+          },
+          "TypeName" : {
+            "description" : "",
+            "example" : 1,
+            "type" : "string"
+          },
+          "Symbol" : {
+            "description" : "",
+            "example" : "PETR4",
+            "type" : "string"
+          },
+          "OrderSide" : {
+            "description" : "",
+            "example" : 1,
+            "type" : "string"
+          },
+          "SequentialOrderNumber" : {
+            "description" : "",
+            "format" : "int64",
+            "example" : 100000,
+            "type" : "integer"
+          },
+          "SecondaryOrderIdentification" : {
+            "description" : " ",
+            "format" : "int64",
+            "example" : 50000,
+            "type" : "integer"
+          },
+          "ExecutionType" : {
+            "description" : " ",
+            "example" : 1,
+            "type" : "string"
+          },
+          "PriorityTime" : {
+            "description" : " ",
+            "example" : "10:50:10.900000",
+            "type" : "string"
+          },
+          "OrderPrice" : {
+            "description" : " ",
+            "format" : "double",
+            "example" : "500.00",
+            "type" : "number"
+          },
+          "OrderTotalQuantity" : {
+            "description" : " ",
+            "format" : "int64",
+            "example" : "100",
+            "type" : "integer"
+          },
+          "OrderNegotiateQuantity" : {
+            "description" : " ",
+            "format" : "int64",
+            "example" : "50",
+            "type" : "integer"
+          },
+          "OrderDate" : {
+            "description" : " ",
+            "example" : "2020-01-06",
+            "type" : "string"
+          },
+          "OrderEntryDateTime" : {
+            "description" : " ",
+            "example" : "2020-01-06 10:50",
+            "type" : "string"
+          },
+          "OrderStatus" : {
+            "description" : " ",
+            "type" : "string"
+          },
+          "AggressorIndicator" : {
+            "description" : " ",
+            "example" : 1,
+            "type" : "string"
+          },
+          "PartyIdentificationCode" : {
+            "description" : " ",
+            "example" : 8,
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "type" : "array"
+    },
+    "Domínio Execution Type" : {
+      "description" : "0 – New \n4 – Canceled\n5 – Replaced\n8 – Rejected\nC – Expired\nD – Restated\nF – Trade",
+      "type" : "string"
+    },
+    "OrdersInformationRspget" : {
+      "description" : "",
+      "properties" : {
+        "Data" : {
+          "$ref" : "#/definitions/DataOrders"
+        },
+        "Included" : {
+          "$ref" : "#/definitions/Pagination"
+        }
+      },
+      "type" : "object"
+    },
+    "Domínio Instrument_Status" : {
+      "description" : "2 – Trading halt (Pause)\n4 – No open (Close)\n17 – Ready to trade (Open)\n18 – Not available for trading (Forbidden)\n20 – Unkown or invalid\n21 – Pre open (Reserved)\n101 - Final Closing Call",
+      "type" : "integer"
+    }
+  },
+  "securityDefinitions" : {
+    "API Key" : {
+      "type" : "apiKey",
+      "description" : "API Key",
+      "name" : "KeyId",
+      "in" : "header"
+    }
+  },
+  "security" : [ {
+    "API Key" : [ ]
+  } ],
+  "info" : {
+    "title" : "Ofertas",
+    "description" : "Dados históricos a partir de D-1 de todas as ofertas realizadas no pregão da B3.",
+    "version" : "1.0"
+  }
+}
